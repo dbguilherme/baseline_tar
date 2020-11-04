@@ -9,6 +9,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 PARENT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+print(PARENT_DIR )
 RET_DIR = os.path.join(PARENT_DIR, 'ret')
 DATA_DIR = os.path.join(PARENT_DIR, 'data')
 

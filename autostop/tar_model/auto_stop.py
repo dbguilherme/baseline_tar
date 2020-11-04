@@ -327,8 +327,8 @@ def autostop_for_large_collection(data_name, topic_set, topic_id,
     return
 
 if __name__ == '__main__':
-    data_name = 'clef2017'
-    topic_id = 'CD008081'
+    data_name = 'tr'
+    topic_id = 'athome100'
     topic_set = 'test'
     query_file = os.path.join(PARENT_DIR, 'data', data_name, 'topics', topic_id)
     qrel_file = os.path.join(PARENT_DIR, 'data', data_name, 'qrels', topic_id)

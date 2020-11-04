@@ -270,9 +270,10 @@ def knee_method(data_name, topic_set, topic_id,
 if __name__ == '__main__':
     # test_detect_knee()
 
-    data_name = 'clef2017'
-    topic_id = 'CD008081'
-    topic_set = 'test'
+    data_name = 'tr'
+    topic_id = 'athome105'
+    topic_set = 'athome105'
+
     query_file = os.path.join(PARENT_DIR, 'data', data_name, 'topics', topic_id)
     qrel_file = os.path.join(PARENT_DIR, 'data', data_name, 'qrels', topic_id)
     doc_id_file = os.path.join(PARENT_DIR, 'data', data_name, 'docids', topic_id)

@@ -7,6 +7,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 
+from sklearn.datasets import load_svmlight_file
+
 from rank_bm25 import BM25Okapi
 from nltk.stem.porter import *
 porter_stemmer = PorterStemmer()
@@ -77,11 +79,12 @@ class Ranker(object):
         features = tfidf_vectorizer.transform(texts)
         for did, feature in zip(dids, features):
             self.did2feature[did] = feature
-
+        
         logging.info('Ranker.set_feature_dict is done.')
         return
 
     def get_feature_by_did(self, dids):
+
         features = scipy.sparse.vstack([self.did2feature[did] for did in dids])
         return features
 

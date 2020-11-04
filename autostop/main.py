@@ -51,11 +51,11 @@ def main():
     sample_percentage = FLAGS.sample_percentage
     target_rel_num = FLAGS.target_rel_num
 
-    # score distribution
-    training_query_files = FLAGS.training_query_files
-    training_qrel_files = FLAGS.training_qrel_files
-    training_doc_id_files = FLAGS.training_doc_id_files
-    training_doc_text_files = FLAGS.training_doc_text_files
+    ## score distribution
+    #training_query_files = FLAGS.training_query_files
+    #training_qrel_files = FLAGS.training_qrel_files
+    #training_doc_id_files = FLAGS.training_doc_id_files
+    #training_doc_text_files = FLAGS.training_doc_text_files
 
     # scal
     sub_percentage = FLAGS.sub_percentage
@@ -65,15 +65,15 @@ def main():
     ita = FLAGS.ita
 
     # autostop
-    sampler_type = FLAGS.sampler_type
-    epsilon = FLAGS.epsilon
-    beta = FLAGS.beta
+    #sampler_type = FLAGS.sampler_type
+    #epsilon = FLAGS.epsilon
+    #beta = FLAGS.beta
 
-    # autostop_large
-    query_files = FLAGS.query_files
-    qrel_files = FLAGS.qrel_files
-    doc_id_files = FLAGS.doc_id_files
-    doc_text_files = FLAGS.doc_text_files
+    ## autostop_large
+    #query_files = FLAGS.query_files
+    #qrel_files = FLAGS.qrel_files
+    #doc_id_files = FLAGS.doc_id_files
+    #doc_text_files = FLAGS.doc_text_files
 
     random_state = FLAGS.random_state
 
@@ -148,21 +148,29 @@ if __name__ == '__main__':
     # command line arguments
     parser = argparse.ArgumentParser()
 
+
+    
+    
+    
     parser.add_argument('--model', type=str, default='', help='autostop, knee, target, autotar, scal, sdtf, sdfu.')
-    parser.add_argument('--data_name', type=str, default='clef2017', help='clef2017, clef2018, clef2019, tr, legal.')
-    parser.add_argument('--topic_set', type=str, default='', help='indicating which topic set or test set.')
-    parser.add_argument('--topic_id', type=str, default='', help='')
-
-    parser.add_argument('--query_file', type=str, default='', help='')
-    parser.add_argument('--qrel_file', type=str, default='', help='')
-    parser.add_argument('--doc_id_file', type=str, default='', help='')
-    parser.add_argument('--doc_text_file', type=str, default='', help='')
-
+    parser.add_argument('--data_name', type=str, default='tr', help='clef2017, clef2018, clef2019, tr, legal.')
+    parser.add_argument('--topic_set', type=str, default='athome104', help='indicating which topic set or test set.')
+    parser.add_argument('--topic_id', type=str, default='athome104', help='')
+    
+    args = vars(parser.parse_args())
+    
+    parent="/home/guilherme/Downloads/auto-stop-tar/data/"+args['data_name']
+    
+    parser.add_argument('--query_file', type=str, default=parent+'/topics/'+args['topic_id'], help='')
+    parser.add_argument('--qrel_file', type=str, default=parent+'/qrels/'+args['topic_id'], help='')
+    parser.add_argument('--doc_id_file', type=str, default=parent+'/docids/'+args['topic_id'], help='')
+    parser.add_argument('--doc_text_file', type=str, default=parent+'/doctexts/'+args['topic_id'], help='')
+    
     # parameter for TAR
     parser.add_argument('--stopping_percentage', type=float, default=1.0, help='stop the TAR process when x percentage of documents have been screened.')
-    parser.add_argument('--stopping_recall', type=float, default=None, help='for debug.')
+    parser.add_argument('--stopping_recall', type=float, default=0.9, help='for debug.')
     parser.add_argument('--stopping_condition', type=str, default=None, help='parameter for the autostop method.')
-    parser.add_argument('--target_recall', type=float, default=None)
+    parser.add_argument('--target_recall', type=float, default=0.9)
 
     # parameter for the ranking module
     parser.add_argument('--ranker_tfidf_corpus_files', type=list, default=[],
@@ -172,7 +180,7 @@ if __name__ == '__main__':
     parser.add_argument('--C', type=float, default=1.0)
 
     # parameter for knee
-    parser.add_argument('--rho', type=str, default='', help='')
+    parser.add_argument('--rho', type=str, default='dynamic', help='')
     parser.add_argument('--stopping_beta', type=float, default=100)
 
     # parameter for target
@@ -186,7 +194,7 @@ if __name__ == '__main__':
 
     # parameter for scal
     parser.add_argument('--sub_percentage', type=float, default=1.0, help='')
-    parser.add_argument('--bound_bt', type=int, default=30, help='')
+    parser.add_argument('--bound_bt', type=int, default=110, help='')
     parser.add_argument('--max_or_min', type=str, default='min', help='')
     parser.add_argument('--bucket_type', type=str, default='samplerel', help='')
     parser.add_argument('--ita', type=float, default=1.05, help='')

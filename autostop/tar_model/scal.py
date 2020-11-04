@@ -13,12 +13,13 @@ from autostop.tar_framework.ranking import Ranker
 from autostop.tar_framework.sampling_estimating import SCALSampler
 from autostop.tar_model.utils import *
 from autostop.tar_framework.utils import *
+from sklearn.datasets import dump_svmlight_file
 
 
 def scal_method(data_name, topic_set, topic_id,
                 query_file, qrel_file, doc_id_file, doc_text_file,  # data parameters
                 stopping_percentage=1.0, stopping_recall=None, target_recall=1.0,  # autostop parameters
-                sub_percentage=0.8, bound_bt=30, max_or_min='min', bucket_type='samplerel', ita=1.05,  # scal parameters
+                sub_percentage=1.0, bound_bt=110, max_or_min='min', bucket_type='samplerel', ita=1.05,  # scal parameters
                 random_state=0):
     """
     Implementation of the S-CAL method [1].
@@ -102,7 +103,14 @@ def scal_method(data_name, topic_set, topic_id,
 
             # train
             train_dids, train_labels = datamanager.get_training_data(temp_doc_num=temp_doc_num)
+            
             train_features = ranker.get_feature_by_did(train_dids)
+            ####################
+            #dump_svmlight_file(train_features , train_labels, "/tmp/dump")
+            
+            #load
+            ##############3
+            
             ranker.train(train_features, train_labels)
 
             # predict
@@ -202,7 +210,7 @@ def scal_method(data_name, topic_set, topic_id,
     for i, (did, score) in enumerate(zipped):
         if score >= threshold or check_func(did) is True:
             shown_dids.append(did)
-
+    print(len(shown_dids))
     tar_run_file = name_tar_run_file(data_name=data_name, model_name=model_name, topic_set=topic_set,
                                      exp_id=random_state, topic_id=topic_id)
     with open(tar_run_file, 'w', encoding='utf8') as f:
@@ -213,9 +221,10 @@ def scal_method(data_name, topic_set, topic_id,
     return
 
 if __name__ == '__main__':
-    data_name = 'clef2017'
-    topic_id = 'CD008081'
-    topic_set = 'test'
+
+    data_name = 'tr'
+    topic_id = 'athome105'
+    topic_set = 'athome105'
     query_file = os.path.join(PARENT_DIR, 'data', data_name, 'topics', topic_id)
     qrel_file = os.path.join(PARENT_DIR, 'data', data_name, 'qrels', topic_id)
     doc_id_file = os.path.join(PARENT_DIR, 'data', data_name, 'docids', topic_id)
