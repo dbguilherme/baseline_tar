@@ -140,7 +140,7 @@ def test_detect_knee():
 
 def knee_method(data_name, topic_set, topic_id,
                 query_file, qrel_file, doc_id_file, doc_text_file,  # data parameters
-                stopping_beta=100, stopping_percentage=1.0, stopping_recall=None,  # autostop parameters
+                stopping_beta=1000, stopping_percentage=1.0, stopping_recall=None,  # autostop parameters
                 rho='dynamic',
                 random_state=0):
     """
@@ -223,7 +223,7 @@ def knee_method(data_name, topic_set, topic_id,
             # debug: writing values
             csvwriter.writerow(
                 (t, batch_size, total_num, sampled_num, total_true_r, running_true_r, ap, running_true_recall))
-
+            print((t, batch_size, total_num, sampled_num, total_true_r, running_true_r, ap, running_true_recall))
             # detect knee
             knee_data.append((sampled_num, running_true_r))
             knee_indice = detect_knee(knee_data)  # x: sampled_percentage, y: running_true_r
@@ -243,19 +243,21 @@ def knee_method(data_name, topic_set, topic_id,
                     rho = 156 - min(running_true_r, 150)   # rho is in [6, 156], see [1]
                 else:
                     rho = float(rho)
-
+                print(current_rho, " ",rho)
                 if current_rho > rho:
                     if sampled_num > stopping_beta:
                         stopping = True
+                        print("stopping rho")
 
             # debug: stop early
             if stopping_recall:
                 if running_true_recall >= stopping_recall:
                     stopping = True
+                    print("sotpping 1")
             if stopping_percentage:
                 if sampled_num >= int(total_num * stopping_percentage):
                     stopping = True
-
+                    print("sotpping 2")
     shown_dids = assessor.get_assessed_dids()
     check_func = assessor.assess_state_check_func()
     tar_run_file = name_tar_run_file(data_name=data_name, model_name=model_name, topic_set=topic_set,

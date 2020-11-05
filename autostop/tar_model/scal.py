@@ -18,8 +18,8 @@ from sklearn.datasets import dump_svmlight_file
 
 def scal_method(data_name, topic_set, topic_id,
                 query_file, qrel_file, doc_id_file, doc_text_file,  # data parameters
-                stopping_percentage=1.0, stopping_recall=None, target_recall=1.0,  # autostop parameters
-                sub_percentage=1.0, bound_bt=110, max_or_min='min', bucket_type='samplerel', ita=1.05,  # scal parameters
+                stopping_percentage=1.0, stopping_recall=1.0, target_recall=0.9,  # autostop parameters
+                sub_percentage=0.8, bound_bt=70, max_or_min='min', bucket_type='samplerel', ita=1.05,  # scal parameters
                 random_state=0):
     """
     Implementation of the S-CAL method [1].
@@ -47,7 +47,7 @@ def scal_method(data_name, topic_set, topic_id,
     model_name += 'tr' + str(target_recall) + '-'
     model_name += 'spt' + str(sub_percentage) + '-'
     model_name += 'bnd' + str(bound_bt) + '-'
-    model_name += 'mxn' + max_or_min + '-'
+    model_name += '' + max_or_min + '-'
     model_name += 'bkt' + bucket_type + '-'
     model_name += 'ita' + str(ita)
     LOGGER.info('Model configuration: {}.'.format(model_name))
@@ -146,7 +146,7 @@ def scal_method(data_name, topic_set, topic_id,
             # debug: writing values
             csvwriter.writerow(
                 (t, batch_size, total_num, sampled_num, total_true_r, total_esti_r, running_true_r, ap, running_esti_recall, running_true_recall))
-
+            print((t, batch_size, total_num, sampled_num, total_true_r, total_esti_r, running_true_r, ap, running_esti_recall, running_true_recall))
             cum_bucketed_dids = sampler.get_bucketed_dids()
             cum_sampled_dids = sampler.get_sampled_dids()
             temp_list.append((total_esti_r, ranker, cum_bucketed_dids, cum_sampled_dids))
